@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  backend-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install backend deps (if present)
+        run: |
+          if [ -f backend/requirements.txt ]; then
+            python -m pip install --upgrade pip
+            pip install -r backend/requirements.txt
+          else
+            echo "No backend/requirements.txt yet; skipping install."
+          fi
+
+      - name: Run backend smoke checks
+        run: |
+          if [ -d backend ]; then
+            python -m compileall backend
+          fi
+
+  frontend-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install and build frontend (if present)
+        run: |
+          if [ -f frontend/package.json ]; then
+            cd frontend
+            npm ci || npm install
+            npm run build --if-present
+            npm run test --if-present
+          else
+            echo "No frontend/package.json yet; skipping frontend checks."
+          fi
+
+  ai-ready-guardrails:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify AI-ready baseline files
+        run: |
+          test -f AGENTS.md
+          test -f .github/copilot-instructions.md
+          test -f .github/PULL_REQUEST_TEMPLATE.md

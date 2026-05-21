@@ -1,0 +1,43 @@
+name: Bug report
+description: Report a defect in LinkPeek
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What broke?
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Sample URL
+      description: Social URL that reproduces issue
+      placeholder: https://www.tiktok.com/...
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Facebook
+        - Instagram
+        - TikTok
+        - Unknown
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or response payload
+      render: shell
