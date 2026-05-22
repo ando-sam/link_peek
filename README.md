@@ -47,5 +47,6 @@ LinkPeek converts Facebook, Instagram, and TikTok URLs into clean preview cards.
 
 - The frontend uses a Next.js rewrite so `/api/preview` forwards to the Django backend in development.
 - The backend validates and scrapes supported Facebook, Instagram, and TikTok URLs.
+- If using Apify Proxy for scraping, set `APIFY_PROXY_TOKEN` in `backend/.env` or your environment.
 - Environment config for Django is available in `backend/.env.example`.
 - GitHub Actions CI, Dependabot, and CodeQL scans are configured under `.github/`.

@@ -1,6 +1,9 @@
+import os
 import httpx
 from bs4 import BeautifulSoup
 
+APIFY_PROXY_TOKEN = os.environ.get("APIFY_PROXY_TOKEN")
+APIFY_PROXY_HOST = "http://proxy.apify.com:8000"
 DEFAULT_TIMEOUT = 10
 DEFAULT_HEADERS = {
     "User-Agent": (
@@ -27,8 +30,20 @@ class BaseScraper:
         raise NotImplementedError
 
     def get_html(self, url: str) -> str:
+        target_url = url
+        request_params = {}
+
+        if APIFY_PROXY_TOKEN:
+            target_url = APIFY_PROXY_HOST
+            request_params = {"token": APIFY_PROXY_TOKEN, "url": url}
+
         try:
-            response = httpx.get(url, headers=DEFAULT_HEADERS, timeout=DEFAULT_TIMEOUT)
+            response = httpx.get(
+                target_url,
+                headers=DEFAULT_HEADERS,
+                params=request_params,
+                timeout=DEFAULT_TIMEOUT,
+            )
             response.raise_for_status()
             return response.text
         except httpx.RequestError as exc:

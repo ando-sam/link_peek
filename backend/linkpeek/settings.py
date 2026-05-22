@@ -59,6 +59,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 
+APIFY_PROXY_TOKEN = os.environ.get("APIFY_PROXY_TOKEN")
+
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 CORS_ALLOW_HEADERS = [
     "content-type",
