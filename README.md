@@ -1,18 +1,13 @@
 # LinkPeek
 
-LinkPeek is a design-driven project for a lightweight preview service that converts Facebook, Instagram, and TikTok URLs into clean, distraction-free preview cards.
+LinkPeek converts Facebook, Instagram, and TikTok URLs into clean preview cards.
 
-## Project overview
+## Project architecture
 
-- **Goal**: Provide a normalized preview JSON response for supported social links.
-- **Platforms**: Facebook, Instagram, TikTok.
-- **Architecture**: FastAPI-style async backend, React + Vite frontend, Tailwind CSS styling.
-- **Current repo state**: Documentation and architecture notes are present; source implementation files are not yet included.
-
-## Intended architecture
-
-- `GET /api/preview?url=<encodedUrl>`
-- Normalize responses to:
+- Backend: Django + Django REST framework
+- Frontend: Next.js + TypeScript + Tailwind CSS
+- Preview endpoint: `GET /api/preview?url=<encodedUrl>`
+- Normalized response fields:
   - `url`
   - `platform`
   - `title`
@@ -23,28 +18,34 @@ LinkPeek is a design-driven project for a lightweight preview service that conve
   - `embed_html`
   - `video_url`
   - `thumbnail_url`
-- Validate URLs before scraping.
-- Use async HTTP requests with browser-like headers and timeouts.
-- Map failures to safe HTTP errors.
-- Render only non-empty fields in the frontend.
 
-## Development expectations
+## Project layout
 
-- FastAPI backend with async endpoint handling.
-- Platform-specific scraper modules.
-- React + Vite frontend with a single URL input flow.
-- Tailwind CSS for UI styling.
-- CORS configured for local dev origins and env-driven production origins.
+- `backend/` — Django project and preview API implementation
+- `frontend/` — Next.js application with the preview UI
 
-## How to use this repo
+## Running locally
 
-1. Review `AGENTS.md` for architecture and API contract guidance.
-2. Review `prd.md` for product goals, user stories, and success metrics.
-3. Add backend implementation under `backend/`.
-4. Add frontend implementation in a new `frontend/` or `app/` directory.
+1. Install backend dependencies:
+   - `python -m venv .venv`
+   - `source .venv/bin/activate`
+   - `pip install -r backend/requirements.txt`
+
+2. Run the Django backend:
+   - `cd backend`
+   - `python manage.py migrate`
+   - `python manage.py runserver`
+
+3. Install frontend dependencies:
+   - `cd frontend`
+   - `npm install`
+   - `npm run dev`
+
+4. Open the Next.js app at `http://localhost:3000`.
 
 ## Notes
 
-- This repo is currently documentation-focused and is ready for implementation.
-- The backend scaffold directories exist to support future code organization.
-- No runtime code is present in the current commit.
+- The frontend uses a Next.js rewrite so `/api/preview` forwards to the Django backend in development.
+- The backend validates and scrapes supported Facebook, Instagram, and TikTok URLs.
+- Environment config for Django is available in `backend/.env.example`.
+- GitHub Actions CI, Dependabot, and CodeQL scans are configured under `.github/`.
