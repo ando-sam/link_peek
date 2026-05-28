@@ -63,7 +63,7 @@ Missing values must be returned as `null`.
 
 2. Configure backend environment:
    - Create `backend/.env` from `backend/.env.example` if available
-   - Set Apify credentials (for example `APIFY_API_TOKEN`)
+   - Set Apify credentials (for example `APIFY_TOKEN`)
    - Set `CORS_ORIGINS` for local Next.js origins if needed
 
 3. Run database migrations and backend:
